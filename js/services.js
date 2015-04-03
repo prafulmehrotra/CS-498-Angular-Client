@@ -11,12 +11,27 @@ angular.module('demoServices', [])
             }
         }
     })
-    .factory('Llamas', function($http, $window) {      
+    .factory('Users', function($http, $window) {      
+        var baseUrl = $window.sessionStorage.baseurl;
         return {
             get : function() {
-                var baseUrl = $window.sessionStorage.baseurl;
-                return $http.get(baseUrl+'/api/llamas');
+                
+                return $http.get(baseUrl+'/api/users');
+            },
+            getd : function(param) {
+                
+                return $http.get(baseUrl+'/api/users/'+param);
+            },
+            del : function(param) {
+                return $http.delete(baseUrl+'/api/users/'+param);
             }
         }
     })
-    ;
+    .factory('Tasks',function($http, $window) {
+        return {
+            get : function() {
+                var baseUrl = $window.sessionStorage.baseurl;
+                return $http.get(baseUrl+'/api/tasks');
+            }
+        }
+    });

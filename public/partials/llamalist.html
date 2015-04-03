@@ -1,7 +1,28 @@
-<div class="list" ng-controller='LlamaListController'>		
-	<ul>
-		<li ng-repeat="llama in llamas">
-			<h3>{{llama.name}}</h3>
-		</li>
-	</ul>
+<div class="list" ng-controller='LlamaListController'>	
+	<div class="text-center">
+		<a class ="button" href="#/adduser">Add User</a>	
+	</div>
+	<div class="row">
+	<div class="large-8 large-offset-2 end">
+	<table style="width:100%;">
+  		<thead>
+    		<tr>
+      			<th class="text-center"> ID </th>
+      			<th class="text-center" >Name</th>
+      			<th class="text-center">Email</th>
+      			<th class="text-center"></th>
+      			
+    		</tr>
+  		</thead>
+  		<tbody>
+    		<tr href="#/settings" ng-repeat="llama in llamas">
+    			<th class="text-center" ><a href="#/userview/{{llama._id}}">{{llama._id}}</a></th>
+    			<th class="text-center" ><a href="#/userview/{{llama._id}}">{{llama.name}}</a></th>
+      			<th class="text-center"><a href="#/userview/{{llama._id}}">{{llama.email}}</a></th>
+      			<th class="text-center"><button ng-click = deleteuser(llama)>Delete User</button></th>
+      		</tr>
+      	</tbody>
+    </table>
+    </div>
+    </div>
 </div>
