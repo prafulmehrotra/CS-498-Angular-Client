@@ -17,19 +17,50 @@ demoControllers.controller('LlamaListController', ['$scope', '$http', 'Users', '
 
 }]);
 
-demoControllers.controller('TaskListController', ['$scope', '$http', 'Tasks', '$window' , function($scope, $http,  Tasks, $window) {
+demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Tasks', '$window' , function($scope, $http, Users, Tasks, $window) {
   Tasks.get().success(function(data){
     $scope.tasks = data.data;
   });
 
-  /*$scope.deletetask = function(param) {
+  $scope.deletetask = function(param) {
     
     Tasks.del(param._id).success(function() {
-      Users.get().success(function(data) {
-        $scope.llamas = data.data;
+          Tasks.get().success(function(data){
+            $scope.tasks = data.data;
+            });
+       });
+
+    var userdel = param.assignedUserName;
+    if(userdel == "unassigned") {
+       //
+    }
+    else {
+      console.log(param._id);
+      Users.getd(param.assignedUser).success(function(data) {
+        var llamas = data.data;
+        console.log(llamas);
+        var x = 0;
+        var narr = [];
+        for(x=0;x<llamas.pendingTasks.length;x++) {
+          if(llamas.pendingTasks[x] != param._id) {
+           narr.push($scope.llamas.pendingTasks[x]);
+          }
+          
+        }
+        llamas.pendingTasks = narr;
+        console.log(llamas);
+        Users.putdata(llamas._id,llamas).success(function(data) {
+          var x = data.data;
+          console.log(x);
+          Tasks.get().success(function(data){
+            $scope.tasks = data.data;
+           });
+          console.log("Done");
+        });
       });
-    });
-  }*/
+    }
+    
+  }
  
 }]);
 
@@ -128,9 +159,9 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
   Users.getd(param).success(function(data){
     $scope.user=data.data;
     name = String($scope.user.name);
-    console.log(name);
+    
     Tasks.getparam($scope.user.name).success(function(data) {
-      console.log($scope.user.name);
+      
       if(data.data.length!=0) {
          $scope.taskcomp=data.data;
          $scope.check = true;

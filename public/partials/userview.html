@@ -31,32 +31,35 @@
 	<div class="row text-center">
 			<button ng-if="but" ng-click="show()">Show Completed Tasks!</button>
 	</div>
-	<div class="row" ng-if="showcompleted">
-		</br>
-		<p><b>Completed Tasks: </b></p>
-		<div class="large-10 large-offset-1 columns end" >
-			<table style="width:100%">
-				<thead>
-					<tr>
-						<th class="text-center">Completed Task</th>
-						<th class="text-center">Created</th>
-						<th class="text-center">Deadline</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="c in completed">
-						<th class="text-center"><a href="#/taskview/{{c._id}}">{{c.name}}</a></th>
-						<th class="text-center"ng-bind="c.dateCreated | date:fullDate"></th>
-						<th class="text-center"ng-bind="c.deadline | date:fullDate"></th>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+</div>
+</div>	
+<div class="row" ng-if="showcompleted">
+	<div class="row">
+	<div class="large-11 large-offset-1 columns"></br>
+	<p><b>Completed Tasks: </b></p>
 	</div>
-	<div class="large-10 large-offset-1 columns end" ng-if="showcompletedstatus">{{completedstatus}}</div>
-	
+	</div>
+	<div class="large-9 large-offset-2 columns end" >
+		<table style="width:100%">
+			<thead>
+				<tr>
+					<th class="text-center">Completed Task</th>
+					<th class="text-center">Created</th>
+					<th class="text-center">Deadline</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="c in completed">
+					<th class="text-center"><a href="#/taskview/{{c._id}}">{{c.name}}</a></th>
+					<th class="text-center"ng-bind="c.dateCreated | date:fullDate"></th>
+					<th class="text-center"ng-bind="c.deadline | date:fullDate"></th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
-</div>
+<div class="row">
+<div class="large-10 large-offset-1 columns end" ng-if="showcompletedstatus">{{completedstatus}}</div></div>
 </div>
 
 

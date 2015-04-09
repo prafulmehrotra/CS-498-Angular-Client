@@ -55,7 +55,7 @@
       			   <th class="text-center">{{task.completed}}</th>
       			   <th class="text-center">{{task.assignedUserName}}</th>
       			   <th class="text-center">{{task.dateCreated | date:fullDate}}</th>
-      			   <th class="text-center"><button>Delete Task</button></th>
+      			   <th class="text-center"><button ng-click="deletetask(task)">Delete Task</button></th>
       	   </tr>
           </tbody>
        </table>

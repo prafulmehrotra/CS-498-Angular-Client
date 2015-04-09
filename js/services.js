@@ -45,6 +45,9 @@ angular.module('demoServices', [])
             getd : function(param) {
                 return $http.get(baseUrl+'/api/tasks/'+param);
             },
+            del : function(param) {
+                return $http.delete(baseUrl+'/api/tasks/'+param);
+            },
             postdata : function(data) {
                 return $http.post(baseUrl+'/api/tasks',data);
             },
