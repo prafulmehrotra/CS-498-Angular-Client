@@ -1,9 +1,61 @@
 <div ng-controller='Userview'>
 <div class="row">
-<div class="large-6 large-offset-3 columns">
-<p>{{user._id}}</p>
-<p>{{user.name}}</p>
-<p>{{user.email}}</p>
+<div class="large-11 large-offset-1 columns end">
+	<p><b>User_ID: </b>{{user._id}}</p>
+	<p><b>Name: </b>{{user.name}}</p>
+	<p><b>Email ID: </b>{{user.email}}</p>
+	<p><b>Pending Tasks: </b></p>
+	<div class="row">
+		<div class="large-10 large-offset-1 columns end">
+			<p>{{status}}</p>
+			<div ng-if="check">
+				<table style="width:100%">
+					<thead>
+						<tr>
+							<th class="text-center">Task</th>
+							<th class="text-center">Deadline</th>
+							<th class="text-center"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="task in taskcomp">
+							<th class="text-center"><a href="#/taskview/{{task._id}}">{{task.name}}</a></th>
+							<th class="text-center"ng-bind="task.deadline | date:fullDate"></th>
+							<th class="text-center"><button>Completed!</button></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>	
+	<div class="row text-center">
+			<button ng-if="but" ng-click="show()">Show Completed Tasks!</button>
+	</div>
+	<div class="row" ng-if="showcompleted">
+		</br>
+		<p><b>Completed Tasks: </b></p>
+		<div class="large-10 large-offset-1 columns end" >
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th class="text-center">Completed Task</th>
+						<th class="text-center">Created</th>
+						<th class="text-center">Deadline</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="c in completed">
+						<th class="text-center"><a href="#/taskview/{{c._id}}">{{c.name}}</a></th>
+						<th class="text-center"ng-bind="c.dateCreated | date:fullDate"></th>
+						<th class="text-center"ng-bind="c.deadline | date:fullDate"></th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="large-10 large-offset-1 columns end" ng-if="showcompletedstatus">{{completedstatus}}</div>
+	
+</div>
 </div>
 </div>
 

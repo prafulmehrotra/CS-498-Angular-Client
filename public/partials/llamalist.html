@@ -18,7 +18,7 @@
     		<tr href="#/settings" ng-repeat="llama in llamas">
     			<th class="text-center" ><a href="#/userview/{{llama._id}}">{{llama._id}}</a></th>
     			<th class="text-center" ><a href="#/userview/{{llama._id}}">{{llama.name}}</a></th>
-      			<th class="text-center"><a href="#/userview/{{llama._id}}">{{llama.email}}</a></th>
+      			<th class="text-center">{{llama.email}}</th>
       			<th class="text-center"><button ng-click = deleteuser(llama)>Delete User</button></th>
       		</tr>
       	</tbody>

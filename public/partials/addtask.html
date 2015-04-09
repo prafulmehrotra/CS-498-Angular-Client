@@ -1,35 +1,40 @@
 <form ng-controller='AddTask'>
   <div class="row">
     <div class="small-12 medium-6 large-6 columns">
-      <label>Name
-        <input type="text" />
+      <label>Name <span style="color:#FF0000;">*</span>
+        <input ng-model="name" type="text" />
       </label>
     </div>
   </div>
    <div class="row">
     <div class="small-12 medium-6 large-6 columns">
       <label>Description
-        <input type="text" />
+        <input ng-model="ds" type="text" />
       </label>
     </div>
   </div>
    <div class="row">
     <div class="small-12 medium-6 large-6 columns">
-      <label>Deadline
-        <input type="text" />
+      <label>Deadline <span style="color:#FF0000;">*</span>
+        <datepicker>
+          <input ng-model = "date" type="text" />
+        </datepicker>  
       </label>
     </div>
   </div>
   <div class="row">
     <div class="small-12 medium-6 large-6 columns">
       <label>User
-        <input type="text" />
-      </label>
+        <select ng-model="suser" ng-options="user.name for user in users"> </select>
+        </label>
     </div>
   </div>
   <div class="row">
    <div class="small-12 medium-6 large-6 columns text-center">
-    <button>Submit!</button>
+    <button ng-click="posttask()">Submit!</button>
+    <div class="text-center" style="margin-top:-15px;margin-bottom:18px;color:white;background-color:red;">{{fin1}}</div>
+    <div class="text-center" style="margin-top:-15px;margin-bottom:18px;color:white;background-color:green;">{{fin2}}</div>
    </div>
   </div>
+
 </form>

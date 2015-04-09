@@ -2,29 +2,63 @@
 	<div class="text-center">
 		<a class="button" href="#/addtask">Add Task</a>	
 	</div>
-	<table style="width:100%;">
-  		<thead>
-    		<tr>
-      			<th class="text-center">Name</th>
-      			<th class="text-center">Description</th>
-      			<th class="text-center">Deadline</th>
-      			<th class="text-center">Completed</th>
-      			<th class="text-center">User</th>
-      			<th class="text-center">Date Created</th>
-      			<th class="text-center"></th> 
-      			
-    		</tr>
-  		</thead>
-  		<tbody>
-    		<tr ng-repeat="task in tasks">
-    			<th class="text-center" >{{task.name}}</th>
-      			<th class="text-center">{{task.description}}</th>
-      			<th class="text-center">{{task.deadline}}</th>
-      			<th class="text-center">{{task.completed}}</th>
-      			<th class="text-center">{{task.assignedUserName}}</th>
-      			<th class="text-center">{{task.dateCreated}}
-      			<th class="text-center"><button>Delete Task</button></th>
-      		</tr>
-      	</tbody>
-    </table>
+  <div class="row">
+    <div class="large-offset-1 large-2 columns">
+        <form>
+          <input type="radio" name="count">All
+          <br>
+          <input type="radio" name="count">Completed
+          <br>
+          <input type="radio" name="count">Pending
+        </form>
+    </div>
+    <div class="large-3 columns">
+        <form>
+          <label>Sort by:</label>
+          <select>
+            <option>Name</option>
+            <option>User</option>
+            <option>Select</option>
+            <option>Deadline</option>
+          </select>  
+        </form>
+    </div>
+    <div class="large-offset-1 large-3 columns end">
+        <form>
+          <label>Order by:</label>
+          <input type="radio" name="order">Ascending
+          <br>
+          <input type="radio" name="order">Descending
+        </form>
+    </div>
+  </div> 
+  <br> 
+  <div class="row">
+    <div class="large-12 columns">
+	     <table style="width:100%;">
+  		    <thead>
+    		    <tr>
+      			   <th class="text-center">Name</th>
+      			   <th class="text-center">Description</th>
+      			   <th class="text-center">Deadline</th>
+      			   <th class="text-center">Completed</th>
+      			   <th class="text-center">User</th>
+      			   <th class="text-center">Date Created</th>
+      			   <th class="text-center"></th> 
+      			</tr>
+  		    </thead>
+  		    <tbody>
+    		    <tr ng-repeat="task in tasks">
+    			     <th class="text-center" ><a href="#/taskview/{{task._id}}">{{task.name}}</a></th>
+      			   <th class="text-center">{{task.description}}</th>
+      			   <th class="text-center">{{task.deadline | date:fullDate}}</th>
+      			   <th class="text-center">{{task.completed}}</th>
+      			   <th class="text-center">{{task.assignedUserName}}</th>
+      			   <th class="text-center">{{task.dateCreated | date:fullDate}}</th>
+      			   <th class="text-center"><button>Delete Task</button></th>
+      	   </tr>
+          </tbody>
+       </table>
+    </div>
+  </div>
 </div>
