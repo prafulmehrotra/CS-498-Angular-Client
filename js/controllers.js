@@ -159,9 +159,9 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
   Users.getd(param).success(function(data){
     $scope.user=data.data;
     name = String($scope.user.name);
-    
+    console.log('/api/tasks?where={"assignedUserName":"JJ Jackson","completed":"false"}');
     Tasks.getparam($scope.user.name).success(function(data) {
-      
+      console.log(data.data);
       if(data.data.length!=0) {
          $scope.taskcomp=data.data;
          $scope.check = true;
@@ -171,6 +171,7 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
       }
     });
   });
+
 
   $scope.show = function() {
     $scope.but = false;
