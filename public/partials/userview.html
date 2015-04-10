@@ -21,7 +21,7 @@
 						<tr ng-repeat="task in taskcomp">
 							<th class="text-center"><a href="#/taskview/{{task._id}}">{{task.name}}</a></th>
 							<th class="text-center"ng-bind="task.deadline | date:fullDate"></th>
-							<th class="text-center"><button>Completed!</button></th>
+							<th class="text-center"><button ng-click="completedtask(task)">Completed!</button></th>
 						</tr>
 					</tbody>
 				</table>

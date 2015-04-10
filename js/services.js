@@ -42,6 +42,10 @@ angular.module('demoServices', [])
             get : function() {
                 return $http.get(baseUrl+'/api/tasks');
             },
+            getrequest : function(request) {
+                console.log(baseUrl+'/api/tasks'+request);
+                return $http.get(baseUrl+'/api/tasks'+request);   
+            },
             getd : function(param) {
                 return $http.get(baseUrl+'/api/tasks/'+param);
             },
@@ -57,6 +61,9 @@ angular.module('demoServices', [])
             },
             getparamt : function(arg) {
                 return $http.get(baseUrl+'/api/tasks?where={"assignedUserName":"'+arg+'","completed":"true"}');
+            },
+            putdata : function(param,data) {
+                return $http.put(baseUrl+'/api/tasks/'+param,data);
             }
         }
     });

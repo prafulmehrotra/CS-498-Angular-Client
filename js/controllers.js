@@ -18,15 +18,37 @@ demoControllers.controller('LlamaListController', ['$scope', '$http', 'Users', '
 }]);
 
 demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Tasks', '$window' , function($scope, $http, Users, Tasks, $window) {
-  Tasks.get().success(function(data){
+  
+
+ $scope.ct = 0;
+ $scope.first = 0;
+ $scope.last = 10;
+ $scope.currpage = 1;
+ $scope.numofpages = 0;
+  var req = '?where={"completed":false}&sort={"assignedUserName":1}';
+  Tasks.getrequest(req).success(function(data){
     $scope.tasks = data.data;
+    $scope.pagenum = 1;
+    $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+    $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
+    console.log($scope.numofpages);
+    $scope.dropdown="name";
+    $scope.all="pending";
+    $scope.ordersort="Ascending";
   });
+  
+  $scope.$watch('tasks', function() {
+    $scope.ct = $scope.tasks.length;
+    $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
+  });
+
 
   $scope.deletetask = function(param) {
     
     Tasks.del(param._id).success(function() {
-          Tasks.get().success(function(data){
+          Tasks.getrequest(req).success(function(data){
             $scope.tasks = data.data;
+            $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
             });
        });
 
@@ -35,10 +57,10 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
        //
     }
     else {
-      console.log(param._id);
+      //console.log(param._id);
       Users.getd(param.assignedUser).success(function(data) {
         var llamas = data.data;
-        console.log(llamas);
+        //console.log(llamas);
         var x = 0;
         var narr = [];
         for(x=0;x<llamas.pendingTasks.length;x++) {
@@ -48,10 +70,10 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
           
         }
         llamas.pendingTasks = narr;
-        console.log(llamas);
+        //console.log(llamas);
         Users.putdata(llamas._id,llamas).success(function(data) {
           var x = data.data;
-          console.log(x);
+          //console.log(x);
           Tasks.get().success(function(data){
             $scope.tasks = data.data;
            });
@@ -61,6 +83,127 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
     }
     
   }
+  $scope.next = function() {
+      if($scope.currpage + 1 <= $scope.numofpages) {
+        $scope.first += 10;
+        $scope.last += 10;
+        $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+        $scope.currpage += 1;
+      }
+    }
+  $scope.prev = function() {
+      if($scope.currpage - 1 > 0) {
+        $scope.first -= 10;
+        $scope.last -= 10;
+        $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+        $scope.currpage -= 1;
+      }
+    } 
+  $scope.clickevent = function() {
+    var request='sort={"'+$scope.dropdown+'":';
+
+    if($scope.ordersort=='Ascending') {
+      request = request + '1}'
+    }
+    else {
+      request = request + '-1}'
+    }
+    
+    if($scope.all == "all") {
+      request = '?'+request;
+    }
+    else {
+      if($scope.all == "completed") {
+        request = '?where={"completed":true}&' + request;
+      }
+      else {
+        request = '?where={"completed":false}&' + request;
+      }
+    }
+    req = request;
+    console.log(req);
+    Tasks.getrequest(request).success(function(data) {
+      $scope.tasks = data.data;
+      $scope.currpage = 1;
+      $scope.first = 0;
+      $scope.last = 10;
+      $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+      $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
+    });
+    //console.log($scope.all);
+    //console.log($scope.dropdown);
+    //console.log($scope.ordersort);
+
+  } 
+
+  $scope.sortclick = function() {
+    var request='sort={"'+$scope.dropdown+'":';
+
+    if($scope.ordersort=='Ascending') {
+      request = request + '1}'
+    }
+    else {
+      request = request + '-1}'
+    }
+    
+    if($scope.all == "all") {
+      request = '?'+request;
+    }
+    else {
+      if($scope.all == "completed") {
+        request = '?where={"completed":true}&' + request;
+      }
+      else {
+        request = '?where={"completed":false}&' + request;
+      }
+    }
+    
+    req = request;
+    console.log(req);
+    Tasks.getrequest(request).success(function(data) {
+      $scope.tasks = data.data;
+      $scope.currpage = 1;
+      $scope.first = 0;
+      $scope.last = 10;
+      $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+      $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
+    });
+  }
+
+  $scope.orderclick = function() {
+    var request='sort={"'+$scope.dropdown+'":';
+
+    if($scope.ordersort=='Ascending') {
+      request = request + '1}'
+    }
+    else {
+      request = request + '-1}'
+    }
+    
+    if($scope.all == "all") {
+      request = '?'+request;
+    }
+    else {
+      if($scope.all == "completed") {
+        request = '?where={"completed":true}&' + request;
+      }
+      else {
+        request = '?where={"completed":false}&' + request;
+      }
+    }
+    
+    req = request;
+    console.log(request);
+    Tasks.getrequest(request).success(function(data) {
+      $scope.tasks = data.data;
+      $scope.currpage = 1;
+      $scope.first = 0;
+      $scope.last = 10;
+      $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
+      $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
+    });
+  }
+
  
 }]);
 
@@ -159,9 +302,9 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
   Users.getd(param).success(function(data){
     $scope.user=data.data;
     name = String($scope.user.name);
-    console.log('/api/tasks?where={"assignedUserName":"JJ Jackson","completed":"false"}');
+    
     Tasks.getparam($scope.user.name).success(function(data) {
-      console.log(data.data);
+      
       if(data.data.length!=0) {
          $scope.taskcomp=data.data;
          $scope.check = true;
@@ -186,6 +329,31 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
         $scope.showcompletedstatus = true;
       }
     });
+  }
+
+  $scope.completedtask = function(param){
+    console.log("here");var post = param;
+    post.completed = true;
+    //console.log(post);
+    Tasks.putdata(param._id,post).success(function(data) {
+      Tasks.getparam($scope.user.name).success(function(data) {
+      
+      if(data.data.length!=0) {
+         $scope.taskcomp=data.data;
+         $scope.check = true;
+      }
+      else {
+           $scope.status="No pending Tasks";
+           $scope.check = false;
+      }
+       });
+      Tasks.getparamt($scope.user.name).success(function(data) {
+      $scope.completed = data.data;
+      $scope.showcompletedstatus = false;
+      $scope.showcompleted = true;
+       });
+    });
+
   }  
   
 }]);
@@ -194,6 +362,7 @@ demoControllers.controller('Taskview', ['$scope', '$http', 'Users', 'Tasks','$wi
   var param = String($routeParams.id);
   Tasks.getd(param).success(function(data) {
     $scope.spectask = data.data;
+    console.log($scope.spectask);
   });
 
 

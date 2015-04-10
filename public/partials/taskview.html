@@ -1,6 +1,6 @@
 <div ng-controller='Taskview'>
 <div class="text-center">
-<a class="button" href="#/edittask/{{spectask._id}}">Edit User</a>
+<a class="button" href="#/edittask/{{spectask._id}}">Edit Task</a>
 </div>
 <div class="row">
 <div class="large-offset-3 large-7 columns end">
@@ -9,6 +9,7 @@
 	<p><b>Task Deadline: </b>{{spectask.deadline | date:fullDate}}</p>
 	<p><b>Task User: </b>{{spectask.assignedUserName}}</p>
 	<p><b>Task Created: </b>{{spectask.dateCreated | date:fullDate}}</p>
+	<span><p><b>Completion Status: </b>{{spectask.completed ? 'Task completed!' : 'Task not completed!'}}</p></span>
 </div>
 </div>
 </div>

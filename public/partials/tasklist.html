@@ -5,34 +5,39 @@
   <div class="row">
     <div class="large-offset-1 large-2 columns">
         <form>
-          <input type="radio" name="count">All
+          <input ng-model="all" ng-click="clickevent()" type="radio" name="count" value="all">All
           <br>
-          <input type="radio" name="count">Completed
+          <input ng-model="all" type="radio" ng-click="clickevent()" name="count" value="completed">Completed
           <br>
-          <input type="radio" name="count">Pending
+          <input ng-model="all" type="radio" ng-click="clickevent()" name="count" value="pending" checked>Pending
         </form>
     </div>
     <div class="large-3 columns">
         <form>
           <label>Sort by:</label>
-          <select>
-            <option>Name</option>
-            <option>User</option>
-            <option>Select</option>
-            <option>Deadline</option>
+          <select ng-model="dropdown" ng-change="sortclick()">
+            <option value="name">Task Name</option>
+            <option value="assignedUserName">Username</option>
+            <option value="dateCreated">Date Created</option>
+            <option value="deadline">Deadline</option>
           </select>  
         </form>
     </div>
     <div class="large-offset-1 large-3 columns end">
         <form>
           <label>Order by:</label>
-          <input type="radio" name="order">Ascending
+          <input type="radio" ng-click="orderclick()"name="order" ng-model="ordersort" value="Ascending">Ascending
           <br>
-          <input type="radio" name="order">Descending
+          <input type="radio" ng-click="orderclick()"name="order" ng-model="ordersort" value="Descending">Descending
         </form>
     </div>
   </div> 
-  <br> 
+  <br>
+  <div class="row">
+    <div class="large-5 columns text-center"><button ng-click="prev()">Previous</button></div>
+    <div class="large-2 columns text-center"><p>{{ct}} Tasks</p><p>Page No: {{currpage}}</p></div>
+    <div class="large-5 columns text-center"><button ng-click="next()">Next</button></div>  
+  </div>
   <div class="row">
     <div class="large-12 columns">
 	     <table style="width:100%;">
@@ -48,7 +53,7 @@
       			</tr>
   		    </thead>
   		    <tbody>
-    		    <tr ng-repeat="task in tasks">
+    		    <tr ng-repeat="task in currtasks">
     			     <th class="text-center" ><a href="#/taskview/{{task._id}}">{{task.name}}</a></th>
       			   <th class="text-center">{{task.description}}</th>
       			   <th class="text-center">{{task.deadline | date:fullDate}}</th>
