@@ -43,7 +43,6 @@ angular.module('demoServices', [])
                 return $http.get(baseUrl+'/api/tasks');
             },
             getrequest : function(request) {
-                console.log(baseUrl+'/api/tasks'+request);
                 return $http.get(baseUrl+'/api/tasks'+request);   
             },
             getd : function(param) {
@@ -56,7 +55,7 @@ angular.module('demoServices', [])
                 return $http.post(baseUrl+'/api/tasks',data);
             },
             getparam : function(arg) {
-                console.log(baseUrl+'/api/tasks?where={"assignedUserName":"'+arg+'","completed":"false"}');
+                //console.log(baseUrl+'/api/tasks?where={"assignedUserName":"'+arg+'","completed":"false"}');
                 return $http.get(baseUrl+'/api/tasks?where={"assignedUserName":"'+arg+'","completed":false}');
             },
             getparamt : function(arg) {

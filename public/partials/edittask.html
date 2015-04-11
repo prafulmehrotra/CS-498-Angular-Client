@@ -25,7 +25,8 @@
   	<div class="row">
     	<div class="small-12 medium-6 large-6 columns">
       	<label>User
-        	<select ng-model="suser" ng-options="user.name for user in users" > </select>
+        	<select ng-model="suser" ng-options="user.name for user in users" >
+            <option value="unassigned">Unassigned</option> </select>
         </label>
     	</div>
   	</div>
@@ -34,7 +35,7 @@
       	<label>Completed:
         	<form >
         	<input type="radio" name="opt" ng-model="complete" value="true">true</input>
-        	<input type="radio" name="opt" ng-model="complete" value="false">false</input>
+        	<input type="radio" name="opt" ng-model="complete" value="false" checked>false</input>
         	</form>
         </label>
     	</div>

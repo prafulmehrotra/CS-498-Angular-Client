@@ -10,6 +10,7 @@
 	<p><b>Task User: </b>{{spectask.assignedUserName}}</p>
 	<p><b>Task Created: </b>{{spectask.dateCreated | date:fullDate}}</p>
 	<span><p><b>Completion Status: </b>{{spectask.completed ? 'Task completed!' : 'Task not completed!'}}</p></span>
+	<button ng-click="toggle()">Toggle Complete Status</button>
 </div>
 </div>
 </div>

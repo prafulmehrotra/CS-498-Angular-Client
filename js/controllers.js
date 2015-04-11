@@ -31,7 +31,7 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
     $scope.pagenum = 1;
     $scope.currtasks = $scope.tasks.slice($scope.first,$scope.last);
     $scope.numofpages = Math.ceil(($scope.tasks.length)/10);
-    console.log($scope.numofpages);
+    //console.log($scope.numofpages);
     $scope.dropdown="name";
     $scope.all="pending";
     $scope.ordersort="Ascending";
@@ -57,6 +57,7 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
        //
     }
     else {
+      if(param.completed == false) {
       //console.log(param._id);
       Users.getd(param.assignedUser).success(function(data) {
         var llamas = data.data;
@@ -74,12 +75,10 @@ demoControllers.controller('TaskListController', ['$scope', '$http', 'Users','Ta
         Users.putdata(llamas._id,llamas).success(function(data) {
           var x = data.data;
           //console.log(x);
-          Tasks.get().success(function(data){
-            $scope.tasks = data.data;
-           });
           console.log("Done");
         });
       });
+     }
     }
     
   }
@@ -338,20 +337,36 @@ demoControllers.controller('Userview', ['$scope', '$http', 'Users', 'Tasks','$wi
     Tasks.putdata(param._id,post).success(function(data) {
       Tasks.getparam($scope.user.name).success(function(data) {
       
-      if(data.data.length!=0) {
-         $scope.taskcomp=data.data;
-         $scope.check = true;
-      }
-      else {
-           $scope.status="No pending Tasks";
-           $scope.check = false;
-      }
-       });
+        if(data.data.length!=0) {
+          $scope.taskcomp=data.data;
+          $scope.check = true;
+          }
+        else {
+            $scope.status="No pending Tasks";
+            $scope.check = false;
+           }
+          });
       Tasks.getparamt($scope.user.name).success(function(data) {
       $scope.completed = data.data;
       $scope.showcompletedstatus = false;
       $scope.showcompleted = true;
        });
+
+      Users.getd($scope.user._id).success(function(data) {
+        $scope.d = data.data;
+        var xi =0;
+        var s = 0;
+        for(xi=0;xi<$scope.d.pendingTasks.length;xi++) {
+          if($scope.d.pendingTasks[xi] == post._id) {
+            s = xi;
+          }
+        }
+        $scope.d.pendingTasks.splice(s,1);
+        Users.putdata($scope.d._id,$scope.d).success(function() {
+          console.log("done");
+        });
+      });
+
     });
 
   }  
@@ -362,8 +377,47 @@ demoControllers.controller('Taskview', ['$scope', '$http', 'Users', 'Tasks','$wi
   var param = String($routeParams.id);
   Tasks.getd(param).success(function(data) {
     $scope.spectask = data.data;
-    console.log($scope.spectask);
+    //console.log($scope.spectask);
   });
+  $scope.toggle = function() {
+    if($scope.spectask.completed == true) {
+      $scope.spectask.completed = false;
+      if($scope.spectask.assignedUserName != 'unassigned') {
+        Tasks.putdata($scope.spectask._id,$scope.spectask).success(function(data) {
+        Users.getd($scope.spectask.assignedUser).success(function(data) {
+          var userget = data.data;
+          userget.pendingTasks.push($scope.spectask._id);
+          Users.putdata(userget._id,userget).success(function() {
+            console.log("done");
+          });
+        });
+      });
+    }
+      
+    }
+    else {
+      $scope.spectask.completed = true;
+      if($scope.spectask.assignedUserName != 'unassigned') {
+        Tasks.putdata($scope.spectask._id,$scope.spectask).success(function(data) {
+        Users.getd($scope.spectask.assignedUser).success(function(data) {
+          var userget = data.data;
+          var xi =0;
+          var s = 0;
+          for(xi=0;xi<userget.pendingTasks.length;xi++) {
+            if(userget.pendingTasks[xi] == $scope.spectask._id) {
+              s = xi;
+              }
+          }
+           userget.pendingTasks.splice(s,1);
+           Users.putdata(userget._id,userget).success(function() {
+              console.log("done");
+             });
+        });
+      });
+    }
+    
+  }
+}
 
 
 
@@ -374,14 +428,36 @@ demoControllers.controller('Taskview', ['$scope', '$http', 'Users', 'Tasks','$wi
 
 demoControllers.controller('Edit', ['$scope', '$http', 'Users', 'Tasks','$window', '$routeParams', function($scope, $http,  Users, Tasks, $window,$routeParams) {
   var param = String($routeParams.id);
+  var user = "";
+  var userid = "";
+  var taskstat = "";
+  $scope.complete = "false";
   Tasks.getd(param).success(function(data) {
     $scope.task = data.data;
     $scope.name = $scope.task.name;
     $scope.ds = $scope.task.description;
+    $scope.date = $scope.task.deadline;
+    userid = $scope.task.assignedUser;
+    user = $scope.task.assignedUserName;
+    taskstat = $scope.task.completed;
      Users.get().success(function(data) {
       $scope.users = data.data;
+      var unassign = {
+        name:"unassigned",
+        email:"unassigned",
+        _id:""
+      };
+      $scope.users.push(unassign);
      });
   });
+  /*if($scope.task.assignedUserName != "unassigned"){
+    Users.getd($scope.task.assignedUser).success(function(data) {
+      $scope.suser = data.data;
+    }).error(function() {
+      $scope.suser = undefined;
+    });
+  }*/
+
 
   $scope.edittask = function() {
     var post = {
@@ -392,16 +468,107 @@ demoControllers.controller('Edit', ['$scope', '$http', 'Users', 'Tasks','$window
       description:$scope.ds,
       deadline:$scope.date
     };
-    console.log(post);
-  }
-  
+    Tasks.putdata(param,post).success(function(data) {
+      console.log("done!");
+      
+    });
+    Tasks.getd(param).success(function(data) {
+      $scope.editdata = data.data;
+    })
+    if(String(taskstat) == "uassigned" && String(post.completed)=="unassigned")
+     {
+      console.log("Both completed");
+     }
+    if(String(taskstat) == "true" && String(post.completed)=="false")
+     {
+       if(String(post.assignedUserName)!="unassigned")
+       {
+        Users.getd(post.assignedUser).success(function(data) {
+          var us = data.data;
+          us.pendingTasks.push($scope.editdata._id);
+          Users.putdata(us._id, us).success(function(data) {
+            console.log("done!!!!");
+          });
+        });
+       }
+    }
+     if(String(taskstat) == "false" && String(post.completed)=="true")
+     {
+       if(String(user)!= "unassigned") {
+        Users.getd(userid).success(function(data) {
+          var usc = data.data;
+          var xi = 0;
+          var s = 0;
+          for(xi=0;xi<usc.pendingTasks.length;xi++) {
+            if(usc.pendingTasks[xi] == $scope.edittask._id) {
+              s = xi;
+            }
+          }
+          usc.pendingTasks.splice(s,1);
+          Users.putdata(usc._id,usc).success(function() {
+            console.log("done111");
+          }); 
+        });
+
+       }
+      
+     }
+     if(String(taskstat) == "false" && String(post.completed)=="false")
+     {
+       if(String(user)=="unassigned" && String(post.assignedUserName)!="unassigned")
+       {
+        Users.getd(post.assignedUser).success(function(data) {
+          var us = data.data;
+          us.pendingTasks.push($scope.editdata._id);
+          Users.putdata(us._id, us).success(function(data) {
+            console.log("done!!!!");
+          });
+        });
+       }
+      if(String(user)!="unassigned" && String(post.assignedUserName)=="unassigned") {
+        Users.getd(userid).success(function(data) {
+          var usc = data.data;
+          var xi = 0;
+          var s = 0;
+          for(xi=0;xi<usc.pendingTasks.length;xi++) {
+            if(usc.pendingTasks[xi] == $scope.edittask._id) {
+              s = xi;
+            }
+          }
+          usc.pendingTasks.slice(s,1);
+          Users.putdata(usc._id,usc).success(function() {
+            console.log("done11133");
+          }); 
+        });
+       }
+       if(String(user)!="unassigned" && String(post.assignedUserName)!="unassigned" && String(user)!=String(post.assignedUserName)) {
+         Users.getd(userid).success(function(data) {
+          var usc = data.data;
+          var xi = 0;
+          var s = 0;
+          for(xi=0;xi<usc.pendingTasks.length;xi++) {
+            if(usc.pendingTasks[xi] == $scope.edittask._id) {
+              s = xi;
+            }
+          }
+          usc.pendingTasks.slice(s,1);
+          Users.putdata(usc._id,usc).success(function() {
+            console.log("done11133");
+            }); 
+          });
+         Users.getd(post.assignedUser).success(function(data) {
+          var us1 = data.data;
+          us1.pendingTasks.push($scope.editdata._id);
+          Users.putdata(us1._id, us1).success(function(data) {
+            console.log("done!!!!");
+            });
+            });
 
 
-
-
-
-
-}]);
+       } 
+     }
+    }
+  }]);
 
 
 demoControllers.controller('SettingsController', ['$scope' , '$window' , function($scope, $window) {
