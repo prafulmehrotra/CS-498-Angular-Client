@@ -44,22 +44,16 @@
   		    <thead>
     		    <tr>
       			   <th class="text-center">Name</th>
-      			   <th class="text-center">Description</th>
-      			   <th class="text-center">Deadline</th>
-      			   <th class="text-center">Completed</th>
+               <th class="text-center">UserID</th>
       			   <th class="text-center">User</th>
-      			   <th class="text-center">Date Created</th>
       			   <th class="text-center"></th> 
       			</tr>
   		    </thead>
   		    <tbody>
     		    <tr ng-repeat="task in currtasks">
     			     <th class="text-center" ><a href="#/taskview/{{task._id}}">{{task.name}}</a></th>
-      			   <th class="text-center">{{task.description}}</th>
-      			   <th class="text-center">{{task.deadline | date:fullDate}}</th>
-      			   <th class="text-center">{{task.completed}}</th>
+               <th class="text-center">{{task._id}}</th>
       			   <th class="text-center">{{task.assignedUserName}}</th>
-      			   <th class="text-center">{{task.dateCreated | date:fullDate}}</th>
       			   <th class="text-center"><button ng-click="deletetask(task)">Delete Task</button></th>
       	   </tr>
           </tbody>

@@ -8,7 +8,7 @@
 	<p><b>Task Description: </b>{{spectask.description}}</p>
 	<p><b>Task Deadline: </b>{{spectask.deadline | date:fullDate}}</p>
 	<p><b>Task User: </b>{{spectask.assignedUserName}}</p>
-	<p><b>Task Created: </b>{{spectask.dateCreated | date:fullDate}}</p>
+	
 	<span><p><b>Completion Status: </b>{{spectask.completed ? 'Task completed!' : 'Task not completed!'}}</p></span>
 	<button ng-click="toggle()">Toggle Complete Status</button>
 </div>

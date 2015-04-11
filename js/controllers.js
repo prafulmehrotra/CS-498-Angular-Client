@@ -1,13 +1,26 @@
 var demoControllers = angular.module('demoControllers', []);
 
-demoControllers.controller('LlamaListController', ['$scope', '$http', 'Users', '$window' , function($scope, $http,  Users, $window) {
+demoControllers.controller('LlamaListController', ['$scope', '$http', 'Users', 'Tasks','$window' , function($scope, $http,  Users, Tasks, $window) {
 
   Users.get().success(function(data){
     $scope.llamas = data.data;
   });
 
   $scope.deleteuser = function(param) {
-    
+    var x= param.pendingTasks;
+    console.log(x);
+    var i = 0;
+    for(i=0;i<x.length;i++) {
+      console.log(x[i]);
+      Tasks.getd(x[i]).success(function(data) {
+        $scope.curr = data.data;
+        $scope.curr.assignedUser ="";
+        $scope.curr.assignedUserName = "unassigned";
+        Tasks.putdata($scope.curr._id,$scope.curr).success(function() {
+          console.log("DONE");
+        });
+      });
+    }
     Users.del(param._id).success(function() {
       Users.get().success(function(data) {
         $scope.llamas = data.data;
